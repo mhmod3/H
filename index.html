@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الرجاء الانتظار...</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            font-size: 2em;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let videoUrl = urlParams.get('vid');
+
+            if (videoUrl) {
+                
+                videoUrl = videoUrl.replace(/ /g, '%20');
+                const mxPlayerLink = `intent:${videoUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
+                window.location.href = mxPlayerLink;
+            } else {
+                
+                window.location.href = "https://youtu.be/9xOi4hnfYTw?si=WpdDtit4UFt7bqCE";
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1>الرجاء الانتظار...</h1>
+</body>
+</html>
