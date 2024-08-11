@@ -27,8 +27,8 @@
             let videoUrl = urlParams.get('vid');
 
             if (videoUrl) {
-                // استبدال الرموز الخاصة
-                videoUrl = videoUrl.replace(/ /g, '%20').replace(/°/g, '%C2%B0');
+                // استبدال المسافات فقط بـ %20
+                videoUrl = videoUrl.replace(/ /g, '%20');
                 const mxPlayerLink = `intent:${videoUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
                 window.location.href = mxPlayerLink;
             } else {
