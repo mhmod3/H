@@ -27,12 +27,11 @@
             let videoUrl = urlParams.get('vid');
 
             if (videoUrl) {
-                
-                videoUrl = videoUrl.replace(/ /g, '%20');
+                // استبدال الرموز الخاصة
+                videoUrl = videoUrl.replace(/ /g, '%20').replace(/°/g, '%C2%B0');
                 const mxPlayerLink = `intent:${videoUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
                 window.location.href = mxPlayerLink;
             } else {
-                
                 window.location.href = "https://youtu.be/9xOi4hnfYTw?si=WpdDtit4UFt7bqCE";
             }
         });
