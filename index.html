@@ -27,10 +27,18 @@
             let videoUrl = urlParams.get('vid');
 
             if (videoUrl) {
+                // فك تشفير الرابط إذا كان مشفراً
+                videoUrl = decodeURIComponent(videoUrl);
+
                 // استبدال المسافات فقط بـ %20
                 videoUrl = videoUrl.replace(/ /g, '%20');
+
                 const mxPlayerLink = `intent:${videoUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
-                window.location.href = mxPlayerLink;
+
+                // تأخير لمدة 3 ثوانٍ قبل فتح المشغل
+                setTimeout(() => {
+                    window.location.href = mxPlayerLink;
+                }, 3000); // تأخير 3000 ميلي ثانية (3 ثوانٍ)
             } else {
                 window.location.href = "https://youtu.be/9xOi4hnfYTw?si=WpdDtit4UFt7bqCE";
             }
