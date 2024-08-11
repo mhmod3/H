@@ -30,8 +30,8 @@
                 // فك تشفير الرابط إذا كان مشفراً
                 videoUrl = decodeURIComponent(videoUrl);
 
-                // استبدال المسافات فقط بـ %20
-                videoUrl = videoUrl.replace(/ /g, '%20');
+                // إزالة أي استبدال للمسافات بـ %20
+                videoUrl = videoUrl.replace(/%20/g, ' ');
 
                 const mxPlayerLink = `intent:${videoUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
 
