@@ -1,51 +1,68 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LiAnimeBot</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: black;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            font-size: 2em;
-        }
-    </style>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            let videoUrl = urlParams.get('vid');
-
-            if (videoUrl) {
-                // فك تشفير الرابط إذا كان مشفراً
-                videoUrl = decodeURIComponent(videoUrl);
-
-                // إزالة أي استبدال للمسافات بـ %20
-                videoUrl = videoUrl.replace(/%20/g, ' ');
-
-                const mxPlayerLink = `intent:${videoUrl}#Intent;package=com.mxtech.videoplayer.ad;end`;
-
-                // تأخير لمدة 3 ثوانٍ قبل فتح المشغل
-                setTimeout(() => {
-                    window.location.href = mxPlayerLink;
-                }, 3000); // تأخير 3000 ميلي ثانية (3 ثوانٍ)
-            } else {
-                window.location.href = "https://youtu.be/9xOi4hnfYTw?si=WpdDtit4UFt7bqCE";
-            }
-        });
-    </script>
+    <title>Anime Details</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 </head>
 <body>
-    <h1>الرجاء الانتظار... تأكد من فتح الرابط في متصفح خارجي وليس متصفح تليجرام</h1>
+    <h1 id="anime-name"></h1>
+    <img id="anime-image" alt="Anime Image" style="max-width: 300px; border-radius: 10px;">
+    <p id="anime-description"></p>
+    <ul id="episode-links"></ul>
+
+    <script>
+        const encryptionKey = '4f5b8c3d10e1d7a9f55e5cbf7c8d8f2b3a2f1e9c9d5a6e8b7d1c6b0f3e5d1a9f4';
+        
+        function decrypt(text) {
+            const bytes = CryptoJS.AES.decrypt(text, CryptoJS.enc.Hex.parse(encryptionKey), {
+                iv: CryptoJS.enc.Hex.parse(encryptionKey.slice(0, 16))
+            });
+            return bytes.toString(CryptoJS.enc.Utf8);
+        }
+
+        function parseQuery(queryString) {
+            const params = new URLSearchParams(queryString);
+            const data = params.get('data');
+            if (!data) {
+                document.body.innerHTML = '<h1>Invalid Link</h1>';
+                return null;
+            }
+            const decryptedQuery = decrypt(data);
+            return new URLSearchParams(decryptedQuery);
+        }
+
+        function displayAnimeData(queryParams) {
+            if (!queryParams) return;
+
+            document.getElementById('anime-name').textContent = queryParams.get('Anime');
+            document.getElementById('anime-image').src = queryParams.get('Image');
+            document.getElementById('anime-description').textContent = queryParams.get('Description');
+
+            const episodesList = document.getElementById('episode-links');
+            queryParams.forEach((value, key) => {
+                if (key.startsWith('ep')) {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = value;
+                    link.textContent = `Watch Episode ${key.replace('ep', '')}`;
+                    listItem.appendChild(link);
+                    episodesList.appendChild(listItem);
+                }
+            });
+        }
+
+        function init() {
+            // استخدم replace لإزالة المعلمات من شريط العنوان بعد فك التشفير
+            const decryptedParams = parseQuery(window.location.search.substring(1));
+            if (decryptedParams) {
+                displayAnimeData(decryptedParams);
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        }
+
+        init();
+    </script>
 </body>
 </html>
