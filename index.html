@@ -13,18 +13,25 @@
     <ul id="episode-links"></ul>
 
     <script>
-        const encryptionKey = '4f5b8c3d10e1d7a9f55e5cbf7c8d8f2b3a2f1e9c9d5a6e8b7d1c6b0f3e5d1a9f4';
-        
-        function decrypt(text) {
-            const bytes = CryptoJS.AES.decrypt(text, CryptoJS.enc.Hex.parse(encryptionKey), {
-                iv: CryptoJS.enc.Hex.parse(encryptionKey.slice(0, 16))
-            });
-            return bytes.toString(CryptoJS.enc.Utf8);
+        const encryptionKey = 'd3f9a1c4b8e2f6c3a7b5d6e4f2c8a9d0d3f9a1c4b8e2f6c3a7b5d6e4f2c8a9d0';
+
+        function decrypt(encryptedText) {
+            const [ivHex, encryptedHex] = encryptedText.split(':');
+            const iv = CryptoJS.enc.Hex.parse(ivHex);
+            const encrypted = CryptoJS.enc.Hex.parse(encryptedHex);
+
+            const decrypted = CryptoJS.AES.decrypt(
+                { ciphertext: encrypted },
+                CryptoJS.enc.Hex.parse(encryptionKey),
+                { iv: iv }
+            );
+
+            return decrypted.toString(CryptoJS.enc.Utf8);
         }
 
         function parseQuery(queryString) {
             const params = new URLSearchParams(queryString);
-            const data = params.get('data');
+            const data = params.get('q');
             if (!data) {
                 document.body.innerHTML = '<h1>Invalid Link</h1>';
                 return null;
@@ -54,7 +61,6 @@
         }
 
         function init() {
-            // استخدم replace لإزالة المعلمات من شريط العنوان بعد فك التشفير
             const decryptedParams = parseQuery(window.location.search.substring(1));
             if (decryptedParams) {
                 displayAnimeData(decryptedParams);
