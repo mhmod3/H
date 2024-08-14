@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anime Details</title>
+    <title>تفاصيل الأنمي</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,15 +17,23 @@
             text-align: center;
         }
         .container {
-            max-width: 800px;
-            background: #fff;
+            max-width: 90%;
+            width: 800px;
+            background: #ffffff;
             border-radius: 15px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            margin: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
             padding: 20px;
+            box-sizing: border-box;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
         h1 {
             color: #333;
+            margin-bottom: 10px;
         }
         img {
             max-width: 100%;
@@ -34,6 +42,7 @@
         }
         p {
             color: #555;
+            line-height: 1.6;
         }
         .buttons {
             margin: 20px 0;
@@ -47,12 +56,14 @@
             margin: 5px;
             cursor: pointer;
             font-size: 16px;
+            transition: background 0.3s, transform 0.3s;
         }
         .buttons button.active {
             background: #0056b3;
         }
         .buttons button:hover {
             background: #0056b3;
+            transform: scale(1.05);
         }
         iframe {
             width: 100%;
@@ -60,14 +71,23 @@
             border: none;
             border-radius: 15px;
             margin-bottom: 20px;
+            background: #000;
+        }
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+            iframe {
+                height: 300px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 id="anime-name"></h1>
-        <img id="anime-image" alt="Anime Image">
-        <p id="anime-description"></p>
+        <h1 id="anime-name">اسم الأنمي</h1>
+        <img id="anime-image" alt="صورة الأنمي">
+        <p id="anime-description">وصف الأنمي</p>
         <div class="buttons" id="episode-buttons"></div>
         <iframe id="video-player" src="" frameborder="0"></iframe>
     </div>
@@ -93,7 +113,7 @@
             const params = new URLSearchParams(queryString);
             const data = params.get('q');
             if (!data) {
-                document.body.innerHTML = '<h1>Invalid Link</h1>';
+                document.body.innerHTML = '<h1>رابط غير صحيح</h1>';
                 return null;
             }
             const decryptedQuery = decrypt(data);
@@ -129,7 +149,7 @@
 
             episodes.forEach((episode, index) => {
                 const button = document.createElement('button');
-                button.textContent = `Episode ${episode.index}`;
+                button.textContent = `حلقة ${episode.index}`;
                 button.onclick = () => updateVideo(index);
                 episodeButtons.appendChild(button);
             });
